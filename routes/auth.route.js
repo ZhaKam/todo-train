@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const bcrypt = require('bcrypt'); 
 const router = Router();
 const User = require('../models/User');
 
@@ -8,13 +9,11 @@ router.post(
       try {
           const { email, password } = req.body;
 
-          // Валидация email
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailRegex.test(email)) {
               return res.status(400).json({ message: 'Некорректный email. Убедитесь, что email содержит символ "@" и имеет правильный формат.' });
           }
 
-          // Валидация пароля
           if (password.length < 6) {
               return res.status(400).json({ message: 'Пароль должен содержать не менее 6 символов' });
           }
@@ -25,8 +24,12 @@ router.post(
               return res.status(300).json({ message: 'Данный email уже занят, попробуйте другой.' });
           }
 
+          const saltRounds = 10; 
+          const hashedPassword = await bcrypt.hash(password, saltRounds);
+
           const user = new User({
-              email, password
+              email, 
+              password: hashedPassword 
           });
 
           await user.save();
