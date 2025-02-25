@@ -1,23 +1,11 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Игнорировать папку node_modules
+node_modules/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
+# Игнорировать временные файлы и папки
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.log
+*.env
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Игнорировать сборки
+dist/
+build/
