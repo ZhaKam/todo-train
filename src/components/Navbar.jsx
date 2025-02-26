@@ -21,11 +21,15 @@ export default function Navbar() {
         <ul id="nav-mobile" className="right hide-on-med-and-down">
           {isAuthenticated ? (
             <li>
-              <button onClick={handleLogout}>Выйти</button>
+              <button className="logout-button" onClick={handleLogout}>
+                Выйти
+              </button>
             </li>
           ) : (
             <li>
-              <a href="/login">Войти</a>
+              <a href="/login" className="login-link">
+                Войти
+              </a>
             </li>
           )}
         </ul>

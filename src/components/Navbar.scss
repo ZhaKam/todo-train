@@ -1,6 +1,29 @@
-.navbar{
+.navbar {
     padding-left: 10px;
-    .brand-logo{
-        font-size: 26px;
+  
+    .brand-logo {
+      font-size: 26px;
     }
-}
+  
+    .logout-button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      padding-right: 10px;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  
+    .login-link {
+      color: white;
+      text-decoration: none;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }

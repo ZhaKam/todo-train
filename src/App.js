@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext } from "react"; // Добавь эту строку
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import Navbar from "./components/Navbar";
-import { AuthContext } from "./context/AuthContext"; 
+import HomePage from "./pages/HomePage/HomePage";
+import { AuthContext } from "./context/AuthContext";
+import "./App.scss";
 
 function App() {
-  const { isAuthenticated } = useContext(AuthContext); 
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <BrowserRouter>
@@ -22,11 +24,7 @@ function App() {
         <Route
           path="/"
           element={
-            isAuthenticated ? (
-              <h2>Главная страница</h2>
-            ) : (
-              <Navigate to="/login" />
-            )
+            isAuthenticated ? <HomePage /> : <Navigate to="/login" />
           }
         />
       </Routes>
