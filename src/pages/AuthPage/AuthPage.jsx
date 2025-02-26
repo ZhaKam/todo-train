@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext"; 
 import "./AuthPage.scss";
 
 export default function AuthPage() {
@@ -8,15 +9,43 @@ export default function AuthPage() {
     email: "",
     password: "",
   });
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLogin, setIsLogin] = useState(true); 
+  const { login } = useContext(AuthContext); 
+  const navigate = useNavigate();
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
+  const loginHandler = async (event) => {
+    event.preventDefault();
+    setErrorMessage("");
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        { ...form },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      login(response.data.token); 
+      navigate("/"); 
+    } catch (error) {
+      if (error.response) {
+        setErrorMessage(error.response.data.message || "Ошибка сервера");
+      } else {
+        setErrorMessage("Что-то пошло не так. Попробуйте снова.");
+      }
+      console.error("Ошибка входа:", error);
+    }
+  };
+
   const registerHandler = async (event) => {
     event.preventDefault();
-    setErrorMessage(""); 
+    setErrorMessage("");
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/registration",
@@ -27,17 +56,12 @@ export default function AuthPage() {
           },
         }
       );
-      console.log(response.data); 
+      console.log(response.data);
+      navigate("/login"); 
     } catch (error) {
       if (error.response) {
-    
-        if (error.response.status === 409) {
-          setErrorMessage(error.response.data.message); 
-        } else {
-          setErrorMessage(error.response.data.message || "Ошибка сервера");
-        }
+        setErrorMessage(error.response.data.message || "Ошибка сервера");
       } else {
-     
         setErrorMessage("Что-то пошло не так. Попробуйте снова.");
       }
       console.error("Ошибка регистрации:", error);
@@ -47,14 +71,12 @@ export default function AuthPage() {
   return (
     <div className="container">
       <div className="auth-page">
-        <h3>Регистрация</h3>
-      
-        {errorMessage && (
-          <div className="error-message">
-            {errorMessage}
-          </div>
-        )}
-        <form className="form form-register" onSubmit={registerHandler}>
+        <h3>{isLogin ? "Вход" : "Регистрация"}</h3>
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        <form
+          className="form form-register"
+          onSubmit={isLogin ? loginHandler : registerHandler}
+        >
           <div className="row">
             <div className="input-field col s12">
               <input
@@ -83,11 +105,15 @@ export default function AuthPage() {
                 type="submit"
                 className="waves-effect waves-light btn btn-blue"
               >
-                Зарегистрироваться
+                {isLogin ? "Войти" : "Зарегистрироваться"}
               </button>
-              <Link to="/login" className="btn-outline btn-reg">
-                Уже есть аккаунт?
-              </Link>
+              <button
+                type="button"
+                className="btn-outline btn-reg"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? "Нет аккаунта?" : "Уже есть аккаунт?"}
+              </button>
             </div>
           </div>
         </form>
