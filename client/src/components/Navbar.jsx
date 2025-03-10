@@ -13,33 +13,45 @@ export default function Navbar() {
   };
 
   return (
-    <nav>
-      <div className="nav-wrapper navbar blue">
-        <Link to="/" className="brand-logo">
-          Тренажерный зал
-        </Link>
-        <ul id="nav-mobile" className="right hide-on-med-and-down">
-          {isAuthenticated ? (
-            <>
-              <li><Link to="/">Главная</Link></li>
-              <li><Link to="/about">О нас</Link></li>
-              <li><Link to="/services">Услуги</Link></li>
-              <li><Link to="/pricing">Цены</Link></li>
-              <li><Link to="/contact">Контакты</Link></li>
-              <li>
-                <button className="logout-button" onClick={handleLogout}>
+    <nav className="navbar-container">
+      <div className="container">
+        <div className="navbar-content">
+          <Link to="/" className="navbar-brand">
+            ADRENALINE<span className="brand-accent">BOOST</span>
+          </Link>
+
+          <div className="nav-links">
+            {isAuthenticated ? (
+              <>
+                <Link to="/" className="nav-link">
+                  Главная
+                </Link>
+                <Link to="/about" className="nav-link">
+                  О нас
+                </Link>
+                <Link to="/services" className="nav-link">
+                  Услуги
+                </Link>
+                <Link to="/pricing" className="nav-link">
+                  Цены
+                </Link>
+                <Link to="/contact" className="nav-link">
+                  Контакты
+                </Link>
+                <button 
+                  className="nav-button logout" 
+                  onClick={handleLogout}
+                >
                   Выйти
                 </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link to="/login" className="login-link">
+              </>
+            ) : (
+              <Link to="/login" className="nav-button login">
                 Войти
               </Link>
-            </li>
-          )}
-        </ul>
+            )}
+          </div>
+        </div>
       </div>
     </nav>
   );

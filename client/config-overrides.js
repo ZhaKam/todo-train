@@ -32,7 +32,6 @@ module.exports = function override(config, env) {
     })
   );
 
-  // Настройка алиасов
   config.resolve.alias = {
     ...config.resolve.alias,
     'process/browser': require.resolve('process/browser.js'), 
