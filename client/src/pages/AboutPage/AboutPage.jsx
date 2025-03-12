@@ -1,10 +1,15 @@
 import React from "react";
 import "./AboutPage.scss";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import HistorySection from "./sections/HistorySection";
 
 export default function AboutPage() {
   return (
     <div className="about-page">
-      <h1>О нас</h1>
+      <Header />
+      <HistorySection />
+      <Footer />
     </div>
   );
 }

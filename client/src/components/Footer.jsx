@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="gym-footer__contacts">
               <h3 className="gym-footer__title">AdrenalineBoost</h3>
               <p className="gym-footer__address">
-                <span> ул. Спортивная, 15</span>
+                <span> Oxford Street, Вестминстер, Лондон </span>
                 <span> Ежедневно 7:00 - 23:00</span>
               </p>
             </div>

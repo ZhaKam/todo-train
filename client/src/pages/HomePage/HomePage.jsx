@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./sections/Header";
+import Header from "../../components/Header";
 import Slider from "./sections/Slider";
 import PromoInfo from "./sections/PromoInfo";
 import Reviews from "./sections/Reviews";
