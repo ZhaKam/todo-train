@@ -33,7 +33,7 @@ export default function Navbar() {
                   Услуги
                 </Link>
                 <Link to="/pricing" className="nav-link">
-                  Цены
+                  Расписание
                 </Link>
                 <Link to="/contact" className="nav-link">
                   Контакты

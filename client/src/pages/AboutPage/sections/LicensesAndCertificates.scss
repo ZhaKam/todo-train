@@ -1,0 +1,114 @@
+.history-section {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #1a1a1a, #252525);
+    color: #fff;
+    text-align: center;
+  
+    .centered-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+  
+    .section-title {
+      font-size: 2.5rem;
+      color: #ff6b6b;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+  
+    .centered-text {
+      text-align: center;
+      line-height: 1.7;
+      margin: 0 auto 1.5rem;
+      max-width: 700px;
+    }
+  
+    .image-wrapper {
+      margin: 2rem auto;
+      .history-photo {
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      }
+    }
+  
+    .photo-caption {
+      color: #888;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+  
+    .content-block {
+      margin: 3rem 0;
+      padding: 2rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+  
+      .subtitle {
+        color: #4ecdc4;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+    }
+  
+    .centered-list {
+      list-style: none;
+      padding: 0;
+      display: inline-block;
+      text-align: left;
+  
+      li {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+  
+        &::before {
+          content: "▹";
+          color: #ff6b6b;
+          position: absolute;
+          left: 0;
+        }
+      }
+    }
+  
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem auto;
+    }
+  
+    .tech-item {
+      background: rgba(78, 205, 196, 0.08);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(78, 205, 196, 0.15);
+  
+      .tech-title {
+        color: #ff6b6b;
+        margin-bottom: 1rem;
+      }
+  
+      .tech-image {
+        width: 100%;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2rem;
+      }
+  
+      .content-block {
+        padding: 1.5rem;
+      }
+  
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }

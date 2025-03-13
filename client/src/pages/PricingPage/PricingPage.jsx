@@ -4,7 +4,7 @@ import "./PricingPage.scss";
 export default function PricingPage() {
   return (
     <div className="pricing-page">
-      <h1>Цены</h1>
+      <h1>Расписание</h1>
     </div>
   );
 }
