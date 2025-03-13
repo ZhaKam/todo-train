@@ -1,5 +1,5 @@
 import React from 'react';
-import './HistorySection.scss'; // Подключаем стили
+import './HistorySection.scss';
 
 export default function HistorySection() {
   return (
@@ -73,9 +73,9 @@ export default function HistorySection() {
         </div>
 
         <div className="image-wrapper">
-          <img 
-            src="/assets/westfield-gym.jpg" 
-            alt="Интерьер клуба Westfield" 
+          <img
+            src="/assets/westfield-gym.jpg"
+            alt="Интерьер клуба Westfield"
             className="history-photo"
           />
           <div className="photo-caption">

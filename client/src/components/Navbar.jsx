@@ -32,7 +32,7 @@ export default function Navbar() {
                 <Link to="/services" className="nav-link">
                   Услуги
                 </Link>
-                <Link to="/pricing" className="nav-link">
+                <Link to="/timetable" className="nav-link">
                   Расписание
                 </Link>
                 <Link to="/contact" className="nav-link">

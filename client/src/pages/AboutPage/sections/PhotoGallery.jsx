@@ -1,5 +1,5 @@
 import React from 'react';
-import './PhotoGallery.scss'; 
+import './PhotoGallery.scss';
 
 export default function PhotoGallery() {
   const photos = [
@@ -19,9 +19,9 @@ export default function PhotoGallery() {
         <div className="gallery-grid">
           {photos.map((photo) => (
             <div key={photo.id} className="gallery-item">
-              <img 
-                src={photo.src} 
-                alt={photo.caption} 
+              <img
+                src={photo.src}
+                alt={photo.caption}
                 className="gallery-photo"
               />
               <div className="photo-caption">{photo.caption}</div>

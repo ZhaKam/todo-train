@@ -3,12 +3,12 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NavBar from "./components/Navbar";
 import HomePage from "./pages/HomePage/HomePage";
 import AboutPage from "./pages/AboutPage/AboutPage";
-import ServicesPage from "./pages/ServicesPage/ServicesPage";
-import PricingPage from "./pages/PricingPage/PricingPage";
+import TimetablePage from "./pages/TimetablePage/TimetablePage";
+import ServicesPage from "./pages/ServicesPage/ServicesPage"
 import ContactPage from "./pages/ContactPage/ContactPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import { AuthContext } from "./context/AuthContext";
-import "./App.scss";
+
 
 export default function App() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -26,16 +26,16 @@ export default function App() {
           element={isAuthenticated ? <AboutPage /> : <Navigate to="/login" />}
         />
         <Route
-          path="/services"
-          element={isAuthenticated ? <ServicesPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/pricing"
-          element={isAuthenticated ? <PricingPage /> : <Navigate to="/login" />}
+          path="/timetable"
+          element={isAuthenticated ? <TimetablePage /> : <Navigate to="/login" />}
         />
         <Route
           path="/contact"
           element={isAuthenticated ? <ContactPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/services"
+          element={isAuthenticated ? <ServicesPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/login"

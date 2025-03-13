@@ -1,14 +1,13 @@
 import React from "react";
 import Header from "../../components/Header";
-import PricePage from "./sections/PricePage";
 import Footer from "../../components/Footer";
-import "./ServicesPage.scss";
+import SchedulePage from "./sections/SchedulePage";
 
 export default function ServicesPage() {
   return (
     <div className="services-page">
       <Header />
-      <PricePage />
+      <SchedulePage />
       <Footer />
     </div>
   );

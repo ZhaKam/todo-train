@@ -1,10 +1,14 @@
 import React from "react";
-import "./ContactPage.scss";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import AddressPage from "./sections/AddressPage";
 
 export default function ContactPage() {
   return (
     <div className="contact-page">
-      <h1>Контакты</h1>
+    <Header />
+    <AddressPage />
+    <Footer />
     </div>
   );
 }

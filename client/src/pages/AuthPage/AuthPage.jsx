@@ -11,7 +11,7 @@ export default function AuthPage() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isLogin, setIsLogin] = useState(true);
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   const changeHandler = (event) => {
@@ -30,12 +30,8 @@ export default function AuthPage() {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      if (isLogin) {
-        login(response.data.token);
-        navigate("/");
-      } else {
-        navigate("/login");
-      }
+      login(response.data.token); 
+      navigate("/"); 
     } catch (error) {
       const message = error.response?.data?.message || 
         `Ошибка ${isLogin ? "входа" : "регистрации"}. Попробуйте снова.`;
