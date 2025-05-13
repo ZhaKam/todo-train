@@ -12,7 +12,7 @@ app.use('/api/auth', require('./routes/auth.route'));
 async function start() {
   try {
     await mongoose.connect(
-      "mongodb+srv://poxoye8123:12345@cluster0.pmvst.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+      "mongodb+srv://vadimkostenko:12345@cluster0.2wc6c32.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
 
     app.listen(PORT, () => {
