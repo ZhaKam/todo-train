@@ -11,7 +11,8 @@ export default function AuthPage() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [isLogin, setIsLogin] = useState(true);
-  const { login } = useContext(AuthContext); 
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const changeHandler = (event) => {
@@ -21,22 +22,56 @@ export default function AuthPage() {
   const handleAuth = async (event) => {
     event.preventDefault();
     setErrorMessage("");
-    
+    setIsLoading(true);
+
     const endpoint = isLogin ? "login" : "registration";
     try {
       const response = await axios.post(
         `http://localhost:5000/api/auth/${endpoint}`,
-        { ...form },
-        { headers: { "Content-Type": "application/json" } }
+        form,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      login(response.data.token); 
-      navigate("/"); 
+      console.log("Server Response:", response.data); // Логирование для отладки
+
+      // Обработка успешного входа
+      if (isLogin) {
+        if (!response.data.token) {
+          throw new Error("Токен не получен");
+        }
+        login(response.data.token);
+        navigate("/");
+      } else {
+        // Обработка успешной регистрации
+        setErrorMessage("Регистрация успешна! Войдите в систему.");
+        setIsLogin(true); // Переключаем на форму входа
+        setForm({ email: "", password: "" }); // Сброс формы
+      }
     } catch (error) {
-      const message = error.response?.data?.message || 
-        `Ошибка ${isLogin ? "входа" : "регистрации"}. Попробуйте снова.`;
+      let message = "Ошибка соединения";
+
+      if (error.response) {
+        // Обработка HTTP ошибок
+        message =
+          error.response.data?.message ||
+          `Ошибка ${isLogin ? "авторизации" : "регистрации"}`;
+      } else if (error.request) {
+        // Нет ответа от сервера
+        message = "Сервер не отвечает";
+      } else {
+        // Другие ошибки
+        message = error.message;
+      }
+
       setErrorMessage(message);
-      console.error(`Ошибка ${endpoint}:`, error);
+      console.error("Auth error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,44 +80,66 @@ export default function AuthPage() {
       <div className="auth-card">
         <div className="auth-header">
           <h3 className="auth-title">{isLogin ? "Вход" : "Регистрация"}</h3>
-          {errorMessage && <div className="auth-error">{errorMessage}</div>}
+          {errorMessage && (
+            <div className={`auth-error ${!isLogin && "success"}`}>
+              {errorMessage}
+              {errorMessage.includes("Ошибка") && (
+                <div className="auth-error-hint">Проверьте введенные данные</div>
+              )}
+            </div>
+          )}
         </div>
 
         <form className="auth-form" onSubmit={handleAuth}>
           <div className="form-group">
             <input
               type="email"
-              id="email"
               name="email"
               className="form-input"
               placeholder="Email"
+              value={form.email}
               onChange={changeHandler}
               required
+              autoComplete="email"
             />
           </div>
 
           <div className="form-group">
             <input
               type="password"
-              id="password"
               name="password"
               className="form-input"
               placeholder="Пароль"
+              value={form.password}
               onChange={changeHandler}
               required
+              minLength="6"
+              autoComplete={isLogin ? "current-password" : "new-password"}
             />
           </div>
 
           <div className="auth-actions">
-            <button type="submit" className="auth-button primary">
-              {isLogin ? "Войти" : "Зарегистрироваться"}
+            <button
+              type="submit"
+              className="auth-button primary"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <span className="auth-spinner">Загрузка...</span>
+              ) : isLogin ? (
+                "Войти"
+              ) : (
+                "Зарегистрироваться"
+              )}
             </button>
+
             <button
               type="button"
               className="auth-button secondary"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => !isLoading && setIsLogin(!isLogin)}
+              disabled={isLoading}
             >
-              {isLogin ? "Создать аккаунт" : "Войти в существующий"}
+              {isLogin ? "Создать аккаунт" : "Уже есть аккаунт?"}
             </button>
           </div>
         </form>

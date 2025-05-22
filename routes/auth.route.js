@@ -1,70 +1,112 @@
+// auth.route.js
 const { Router } = require("express");
 const bcrypt = require('bcrypt');
 const router = Router();
 const jwt = require("jsonwebtoken"); 
 const User = require('../models/User');
 
-router.post(
-    "/registration",
-    async (req, res) => {
-        try {
-            const { email, password } = req.body;
+// Общие константы
+const JWT_SECRET = process.env.JWT_SECRET || "strong_secret_key_here";
+const SALT_ROUNDS = 10;
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                return res.status(400).json({ message: 'Некорректный email. Убедитесь, что email содержит символ "@" и имеет правильный формат.' });
-            }
+// Улучшенная валидация email
+const validateEmail = (email) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
 
-            if (password.length < 6) {
-                return res.status(400).json({ message: 'Пароль должен содержать не менее 6 символов' });
-            }
+// Регистрация пользователя
+router.post("/registration", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-            const isUsed = await User.findOne({ email });
-
-            if (isUsed) {
-                return res.status(300).json({ message: 'Данный email уже занят, попробуйте другой.' });
-            }
-
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-            const user = new User({
-                email,
-                password: hashedPassword
-            });
-
-            await user.save();
-
-            res.status(201).json({ message: 'Пользователь создан' });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: 'Ошибка сервера' });
-        }
+    // Валидация входных данных
+    if (!validateEmail(email)) {
+      return res.status(400).json({ 
+        message: 'Некорректный email. Введите email в формате example@domain.com'
+      });
     }
-);
 
+    if (password.length < 6) {
+      return res.status(400).json({ 
+        message: 'Пароль должен содержать не менее 6 символов' 
+      });
+    }
+
+    // Проверка существующего пользователя
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ 
+        message: 'Этот email уже зарегистрирован' 
+      });
+    }
+
+    // Хеширование пароля
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    // Создание и сохранение пользователя
+    const user = new User({ email, password: hashedPassword });
+    await user.save();
+
+    // Ответ без чувствительных данных
+    res.status(201).json({ 
+      success: true,
+      message: 'Регистрация успешна! Теперь вы можете войти',
+      userId: user._id
+    });
+
+  } catch (error) {
+    console.error('Registration Error:', error);
+    res.status(500).json({ 
+      message: 'Ошибка сервера. Пожалуйста, попробуйте позже' 
+    });
+  }
+});
+
+// Аутентификация пользователя
 router.post("/login", async (req, res) => {
-    try {
-      const { email, password } = req.body;
-  
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: "Пользователь не найден" });
-      }
-  
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(400).json({ message: "Неверный пароль" });
-      }
-  
-      const token = jwt.sign({ userId: user._id }, "secret-key", { expiresIn: "1h" });
-  
-      res.status(200).json({ token, userId: user._id });
-    } catch (error) {
-      console.error("Ошибка входа:", error);
-      res.status(500).json({ message: "Ошибка сервера" });
+  try {
+    const { email, password } = req.body;
+
+    // Поиск пользователя
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ 
+        message: "Неверные учетные данные" 
+      });
     }
-  });
-  
+
+    // Проверка пароля
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ 
+        message: "Неверные учетные данные" 
+      });
+    }
+
+    // Генерация JWT токена
+    const token = jwt.sign(
+      { 
+        userId: user._id,
+        email: user.email
+      }, 
+      JWT_SECRET, 
+      { expiresIn: "1h" }
+    );
+
+    // Ответ с токеном
+    res.status(200).json({
+      success: true,
+      token,
+      userId: user._id,
+      expiresIn: 3600 // Время жизни токена в секундах
+    });
+
+  } catch (error) {
+    console.error("Login Error:", error);
+    res.status(500).json({ 
+      message: "Ошибка сервера. Пожалуйста, попробуйте позже" 
+    });
+  }
+});
+
 module.exports = router;
